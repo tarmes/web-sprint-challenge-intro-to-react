@@ -15,23 +15,40 @@ const App = () => {
   // sync up with, if any.
 
   useEffect(() => {
-    axios.get(`https://swapi.dev/api/people/`)
-      .then(res => {
-        setCharacters(res.data.results)
+    axios
+      .get("https://swapi.dev/api/people/")
+      .then((response) => {
+        console.log(response);
+        const characterList = response.data.results;
+        console.log("Response DATA", characterList);
+        setCharacters(characterList);
       })
-  }, [])
+      .catch((error) => {
+        console.log("The data was not returned.", error);
+      });
+  }, []);
 
 
   return (
-    <div className="App">
-      <h1 className="Header">Characters</h1>
-      <div>
-        {characters.map((c) => 
-          <Character key = {c.name} characterObj = {c}/>
-        )}
+    <>
+      <div className="Cards">
+        {characters.map((obj) => {
+          return (
+            <Character
+              key={obj.url}
+              name={obj.name}
+              eyecolor={obj.eye_color}
+              skincolor={obj.skin_color}
+              haircolor={obj.hair_color}
+              gender={obj.gender}
+              height={obj.height}
+              mass={obj.mass}
+            />
+          );
+        })}
       </div>
-    </div>
+    </>
   );
-}
+};
 
 export default App;
